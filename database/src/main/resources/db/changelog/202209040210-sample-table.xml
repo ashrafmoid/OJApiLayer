@@ -48,4 +48,84 @@
                                  constraintName="fk_registered_user_table_user_profile"
                                  referencedTableName="user_profile" referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet author="Ashraf" id="202209042341">
+        <createTable tableName="question">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="document_link" type="varchar"/>
+            <column name="rating" type="int"/>
+            <column name="editorial_id" type="BIGINT"/>
+            <column name="topics" type="text[]"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040121">
+        <createTable tableName="editorial">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="document_link" type="varchar"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040125">
+        <createTable tableName="editorial_author_relationship">
+            <column name="editorial_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_profile_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040130">
+        <createTable tableName="question_author_relationship">
+            <column name="question_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_profile_id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040135">
+        <addForeignKeyConstraint baseTableName="question_author_relationship" baseColumnNames="question_id"
+                                 constraintName="fk_question_author_relationship_question"
+                                 referencedTableName="question" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040140">
+        <addForeignKeyConstraint baseTableName="question_author_relationship" baseColumnNames="user_profile_id"
+                                 constraintName="fk_question_author_relationship_user_profile"
+                                 referencedTableName="user_profile" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040145">
+        <addForeignKeyConstraint baseTableName="editorial_author_relationship" baseColumnNames="editorial_id"
+                                 constraintName="fk_editorial_author_relationship_editorial"
+                                 referencedTableName="editorial" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040150">
+        <addForeignKeyConstraint baseTableName="editorial_author_relationship" baseColumnNames="user_profile_id"
+                                 constraintName="fk_editorial_author_relationship_user_profile_id"
+                                 referencedTableName="user_profile" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210040320">
+        <addForeignKeyConstraint baseTableName="question" baseColumnNames="editorial_id"
+                                 constraintName="fk_question_editorial"
+                                 referencedTableName="editorial" referencedColumnNames="id"/>
+    </changeSet>
+
 </databaseChangeLog>

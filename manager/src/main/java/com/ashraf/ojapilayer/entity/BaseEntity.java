@@ -1,10 +1,8 @@
 package com.ashraf.ojapilayer.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
@@ -14,10 +12,6 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
-@TypeDef(
-        name = "jsonb",
-        typeClass = JsonBinaryType.class
-)
 public class BaseEntity {
 
     @CreationTimestamp
