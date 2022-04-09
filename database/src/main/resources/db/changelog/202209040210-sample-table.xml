@@ -14,4 +14,38 @@
     <changeSet author="Ashraf" id="202209040218">
         <dropTable tableName="test"/>
     </changeSet>
+
+    <changeSet author="Ashraf" id="202209040312">
+        <createTable tableName="registered_user_table">
+            <column name="id" type="varchar">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="password" type="varchar"/>
+            <column name="user_profile_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202209040315">
+        <createTable tableName="user_profile">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="name" type="varchar"/>
+            <column name="college_name" type="varchar"/>
+            <column name="rating" type="varchar"/>
+            <column name="address" type="jsonb"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202209040320">
+        <addForeignKeyConstraint baseTableName="registered_user_table" baseColumnNames="user_profile_id"
+                                 constraintName="fk_registered_user_table_user_profile"
+                                 referencedTableName="user_profile" referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
