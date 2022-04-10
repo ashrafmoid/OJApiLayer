@@ -1,6 +1,6 @@
 package com.ashraf.ojapilayer.entity;
 
-import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.array.ListArrayType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +31,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@TypeDef(name = "string-array", typeClass = StringArrayType.class)
+@TypeDef(name = "list-array", typeClass = ListArrayType.class)
 public class Question extends BaseEntity {
     @Id
     @Column
@@ -50,9 +50,9 @@ public class Question extends BaseEntity {
     @ToString.Exclude
     private List<UserProfile> authors = new ArrayList<>();
 
-    @Type(type = "string-array")
-    @Column(name = "topics", columnDefinition = "text[]")
-    private String[] topics;
+    @Type(type = "list-array")
+    @Column(name = "topics", columnDefinition = "varchar[]")
+    private List<String> topics;
 
     @Column
     private Integer rating;

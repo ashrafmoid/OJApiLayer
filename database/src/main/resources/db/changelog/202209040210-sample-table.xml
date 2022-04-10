@@ -60,7 +60,7 @@
             <column name="document_link" type="varchar"/>
             <column name="rating" type="int"/>
             <column name="editorial_id" type="BIGINT"/>
-            <column name="topics" type="text[]"/>
+            <column name="topics" type="varchar[]"/>
         </createTable>
     </changeSet>
 
