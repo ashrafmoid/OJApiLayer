@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,4 +61,7 @@ public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "editorial_id")
     private Editorial editorial;
+
+    @OneToMany(mappedBy = "question")
+    private List<Submission> submissions;
 }

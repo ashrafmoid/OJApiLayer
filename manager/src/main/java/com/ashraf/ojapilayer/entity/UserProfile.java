@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.ArrayList;
@@ -63,6 +64,10 @@ public class UserProfile extends BaseEntity {
 
     @ManyToMany(mappedBy = "authors")
     private List<Editorial> editorials = new ArrayList<>();
+
+    @OneToMany(mappedBy = "author")
+    private List<Submission> submissions;
+
 
     public void setRegisteredUserTable(RegisteredUser registeredUserTable) {
         this.registeredUserTable = registeredUserTable;

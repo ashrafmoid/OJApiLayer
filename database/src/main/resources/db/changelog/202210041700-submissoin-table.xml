@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet author="Ashraf" id="202210041700">
+        <createTable tableName="submission">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="status" type="varchar"/>
+            <column name="language" type="int"/>
+            <column name="execution_time" type="BIGINT"/>
+            <column name="memory" type="int"/>
+            <column name="question_id" type="BIGINT"/>
+            <column name="author_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210041705">
+        <addForeignKeyConstraint baseTableName="submission" baseColumnNames="question_id"
+                                 constraintName="fk_submission_question"
+                                 referencedTableName="question" referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet author="Ashraf" id="202210041710">
+        <addForeignKeyConstraint baseTableName="submission" baseColumnNames="author_id"
+                                 constraintName="fk_submission_user_profile"
+                                 referencedTableName="user_profile" referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
