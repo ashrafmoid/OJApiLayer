@@ -8,21 +8,24 @@ import com.ashraf.ojapilayer.exception.InvalidPasswordException;
 import com.ashraf.ojapilayer.api.requestmodels.UserCreationRequest;
 import com.ashraf.ojapilayer.exception.UnRegisteredUserException;
 import com.ashraf.ojapilayer.repository.RegisteredUserRepository;
-import com.ashraf.ojapilayer.service.UserRegistrationService;
+import com.ashraf.ojapilayer.repository.UserProfileRepository;
+import com.ashraf.ojapilayer.service.UserManagementService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class UserRegistrationServiceImpl implements UserRegistrationService {
+public class UserManagementServiceImpl implements UserManagementService {
 
     private final RegisteredUserRepository registeredUserRepository;
+    private final UserProfileRepository userProfileRepository;
 
     @Override
     @Transactional
@@ -32,7 +35,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         }
         final RegisteredUser registeredUser = RegisteredUser.builder().password(userCreationRequest.getPassword()).id(userCreationRequest.getId()).build();
         final UserProfile userProfile = UserProfile.builder().build();
-        userProfile.setRegisteredUserTable(registeredUser);
+        userProfile.addRegisteredUser(registeredUser);
         registeredUserRepository.save(registeredUser);
     }
 
@@ -46,6 +49,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
             throw new InvalidPasswordException("password or username is invalid, please enter correct password");
         }
         log.info("login successful for user with id {}", loginRequest.getId());
+    }
+
+    @Override
+    public List<UserProfile> findAllUserById(List<String> ids) {
+        List<Long> userProfileIds = registeredUserRepository.findAllUserProfileIdByHandle(ids);
+        return userProfileRepository.findAllByIdIn(userProfileIds);
     }
 
     // can add more robust checks

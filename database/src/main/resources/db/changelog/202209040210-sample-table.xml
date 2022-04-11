@@ -38,7 +38,7 @@
             <column name="version" type="BIGINT"/>
             <column name="name" type="varchar"/>
             <column name="college_name" type="varchar"/>
-            <column name="rating" type="varchar"/>
+            <column name="rating" type="int"/>
             <column name="address" type="jsonb"/>
         </createTable>
     </changeSet>

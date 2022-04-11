@@ -33,4 +33,29 @@
                                  referencedTableName="user_profile" referencedColumnNames="id"/>
     </changeSet>
 
+    <changeSet author="Ashraf" id="202211042359">
+        <createTable tableName="file_store">
+            <column name="id" type="varchar">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="version" type="BIGINT"/>
+            <column name="data" type="blob"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="Ashraf" id = "202212040005">
+        <addColumn tableName="submission">
+            <column name="document_link" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="Ashraf" id = "202212040250">
+        <addColumn tableName="file_store">
+            <column name="file_type" type="varchar"/>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>

@@ -24,7 +24,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "userProfile")
 @Table(name = "user_profile")
 @NoArgsConstructor
 @Builder
@@ -54,10 +54,10 @@ public class UserProfile extends BaseEntity {
     private Address address;
 
     @Column
-    private String rating;
+    private Integer rating;
 
     @OneToOne(mappedBy = "userProfile", fetch = FetchType.LAZY)
-    private RegisteredUser registeredUserTable;
+    private RegisteredUser registeredUser;
 
     @ManyToMany(mappedBy = "authors")
     private List<Question> questions = new ArrayList<>();
@@ -69,9 +69,9 @@ public class UserProfile extends BaseEntity {
     private List<Submission> submissions;
 
 
-    public void setRegisteredUserTable(RegisteredUser registeredUserTable) {
-        this.registeredUserTable = registeredUserTable;
-        registeredUserTable.setUserProfile(this);
+    public void addRegisteredUser(RegisteredUser registeredUser) {
+        this.registeredUser = registeredUser;
+        registeredUser.setUserProfile(this);
     }
 
     public void addQuestion(Question question) {

@@ -2,19 +2,18 @@ package com.ashraf.ojapilayer.controller;
 
 import com.ashraf.ojapilayer.api.requestmodels.LoginRequest;
 import com.ashraf.ojapilayer.api.requestmodels.UserCreationRequest;
-import com.ashraf.ojapilayer.service.UserRegistrationService;
+import com.ashraf.ojapilayer.service.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
 public class HomePageController {
 
-    private final UserRegistrationService userRegistrationService;
+    private final UserManagementService userRegistrationService;
 
     @RequestMapping("/home")
     public String getHomePage() {

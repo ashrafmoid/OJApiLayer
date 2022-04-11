@@ -16,7 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
+@Entity(name = "registeredUser")
 @Table(name = "registered_user_table")
 @Builder
 @NoArgsConstructor

@@ -56,4 +56,6 @@ public class Submission extends BaseEntity {
 
     @Column
     private Integer memory;
+
+    private String documentLink;
 }
