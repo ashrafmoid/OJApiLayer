@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Component
@@ -27,6 +28,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final UserManagementService userManagementService;
 
     @Override
+    @Transactional
     public Question addQuestion(MultipartFile file, QuestionMetaData metaData) {
         final String id = documentService.uploadMultipartFile(FileUploadRequest.builder()
                 .multipartFile(file).fileType(metaData.getFileType()).build());

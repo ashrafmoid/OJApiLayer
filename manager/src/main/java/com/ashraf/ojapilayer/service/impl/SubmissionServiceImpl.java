@@ -15,6 +15,7 @@ import com.ashraf.ojapilayer.service.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Component
@@ -31,6 +32,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     */
 
     @Override
+    @Transactional
     public String submitSolution(SubmissionRequest request) {
         String fileId = documentService.uploadMultipartFile(FileUploadRequest.builder()
                 .multipartFile(request.getFile())
