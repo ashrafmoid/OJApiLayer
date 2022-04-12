@@ -2,6 +2,7 @@ package com.ashraf.ojapilayer.controller;
 
 import com.ashraf.ojapilayer.DTO.QuestionDTO;
 import com.ashraf.ojapilayer.entity.Question;
+import com.ashraf.ojapilayer.mapper.QuestionMapper;
 import com.ashraf.ojapilayer.models.QuestionMetaData;
 import com.ashraf.ojapilayer.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -20,17 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/question")
 public class QuestionController {
     private final QuestionService questionService;
+    private final QuestionMapper questionMapper;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addQuestion(@RequestPart(value = "file")MultipartFile file,
                                          @RequestPart(value = "metaData") QuestionMetaData metaData) {
-        QuestionDTO questionDTO = questionService.addQuestion(file, metaData);
+        QuestionDTO questionDTO = questionMapper.questionToQuestionDTO(
+                questionService.addQuestion(file, metaData));
         return ResponseEntity.ok(questionDTO);
     }
 
     @GetMapping("/{questionId}")
     public ResponseEntity<?> getQuestionById(@PathVariable("questionId") Long questionId) {
-         return ResponseEntity.ok(questionService.getQuestionById(questionId));
+         return ResponseEntity.ok(questionMapper.questionToQuestionDTO(
+                 questionService.getQuestionById(questionId)));
     }
 
 

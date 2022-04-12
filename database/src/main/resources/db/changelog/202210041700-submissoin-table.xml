@@ -57,5 +57,9 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="Ashraf" id = "202213040108">
+        <modifyDataType tableName="submission" columnName="language" newDataType="varchar"/>
+    </changeSet>
+
 
 </databaseChangeLog>

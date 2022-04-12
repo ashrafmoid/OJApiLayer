@@ -57,6 +57,11 @@ public class UserManagementServiceImpl implements UserManagementService {
         return userProfileRepository.findAllByIdIn(userProfileIds);
     }
 
+    @Override
+    public UserProfile findUserById(Long id) {
+        return userProfileRepository.findById(id).orElse(null);
+    }
+
     // can add more robust checks
     private boolean isValidPassword(final String password) {
         if (StringUtils.isNotEmpty(password)) return true;

@@ -1,6 +1,5 @@
 package com.ashraf.ojapilayer.service.impl;
 
-import com.ashraf.ojapilayer.DTO.QuestionDTO;
 import com.ashraf.ojapilayer.api.requestmodels.FileUploadRequest;
 import com.ashraf.ojapilayer.api.requestmodels.Tags;
 import com.ashraf.ojapilayer.entity.Question;
@@ -28,7 +27,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final UserManagementService userManagementService;
 
     @Override
-    public QuestionDTO addQuestion(MultipartFile file, QuestionMetaData metaData) {
+    public Question addQuestion(MultipartFile file, QuestionMetaData metaData) {
         final String id = documentService.uploadMultipartFile(FileUploadRequest.builder()
                 .multipartFile(file).fileType(metaData.getFileType()).build());
         final List<UserProfile> userProfiles = userManagementService.findAllUserById(metaData.getAuthorId());
@@ -37,13 +36,13 @@ public class QuestionServiceImpl implements QuestionService {
                 .topics(metaData.getTopics())
                 .authors(userProfiles)
                 .build();
-        Question question1 = questionRepository.save(question);
-        return questionMapper.questionToQuestionDTO(question1);
+        return questionRepository.save(question);
+
     }
 
     @Override
-    public QuestionDTO getQuestionById(Long id) {
-        return questionMapper.questionToQuestionDTO(questionRepository.findById(id).orElse(null));
+    public Question getQuestionById(Long id) {
+        return questionRepository.findById(id).orElse(null);
     }
 
     @Override

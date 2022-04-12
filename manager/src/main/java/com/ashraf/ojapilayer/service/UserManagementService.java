@@ -13,4 +13,6 @@ public interface UserManagementService {
     void verifyLogin(LoginRequest loginRequest);
 
     List<UserProfile> findAllUserById(List<String> ids);
+
+    UserProfile findUserById(Long id);
 }

@@ -9,8 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface QuestionService {
-    QuestionDTO addQuestion(MultipartFile file, QuestionMetaData metaData);
-    QuestionDTO getQuestionById(Long id);
+    Question addQuestion(MultipartFile file, QuestionMetaData metaData);
+    Question getQuestionById(Long id);
     // this needs to be paginated
     List<Question> getQuestionsByTag(Tags tags);
 

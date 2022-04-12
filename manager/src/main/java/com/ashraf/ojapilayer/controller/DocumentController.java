@@ -1,5 +1,6 @@
 package com.ashraf.ojapilayer.controller;
 
+import com.ashraf.ojapilayer.constants.Constant;
 import com.ashraf.ojapilayer.entity.FileStore;
 import com.ashraf.ojapilayer.service.DocumentService;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class DocumentController {
 
     private MediaType getMediaType(String fileType) {
         if("PDF".equalsIgnoreCase(fileType)) {
-            return MediaType.APPLICATION_PDF;
+            return Constant.PDF_APPLICATION_TYPE;
         } else if("txt".equalsIgnoreCase(fileType)) {
-            return MediaType.TEXT_PLAIN;
+            return Constant.TEXT_PLAIN_APPLICATION_TYPE;
         }
         return null;
     }
