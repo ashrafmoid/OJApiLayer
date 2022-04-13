@@ -7,29 +7,35 @@ import com.ashraf.ojapilayer.entity.Question;
 import com.ashraf.ojapilayer.entity.Submission;
 import com.ashraf.ojapilayer.entity.UserProfile;
 import com.ashraf.ojapilayer.enums.SubmissionStatus;
+import com.ashraf.ojapilayer.kafka.producer.KafkaProducer;
 import com.ashraf.ojapilayer.repository.SubmissionRepository;
 import com.ashraf.ojapilayer.service.DocumentService;
 import com.ashraf.ojapilayer.service.QuestionService;
 import com.ashraf.ojapilayer.service.SubmissionService;
 import com.ashraf.ojapilayer.service.UserManagementService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class SubmissionServiceImpl implements SubmissionService {
     private final DocumentService documentService;
     private final SubmissionRepository submissionRepository;
     private final UserManagementService userManagementService;
     private final QuestionService questionService;
+    private final KafkaProducer kafkaProducer;
+    private final ObjectMapper objectMapper;
 
-   /*
-      1.upload solution to DB
-      2.trigger workflow for evaluation(Async)
-    */
+    @Value("${kafka.submission.topic}")
+    private String submissionTopic;
 
     @Override
     @Transactional
@@ -47,7 +53,12 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .status(SubmissionStatus.QUEUED)
                 .build();
         submission = submissionRepository.save(submission);
-        // trigger workflow here
+        try {
+            kafkaProducer.sendMessage(submissionTopic, objectMapper.writeValueAsString(submission));
+        } catch (IOException e) {
+            log.error("Exception value serializing submission {}", submission);
+            throw new RuntimeException("Exception occurred while serializing value");
+        }
         return submission.getDocumentLink();
 
     }
