@@ -24,7 +24,8 @@ public class SubmissionController {
     public ResponseEntity<?> submitSolution(@RequestPart("file") MultipartFile file,
                                             @RequestPart("metaData")SubmissionRequest metaData) {
         metaData.setFile(file);
-        return ResponseEntity.ok(submissionService.submitSolution(metaData));
+        return ResponseEntity.ok(submissionMapper.submissionToSubmissionDTO(
+                submissionService.submitSolution(metaData)));
 
     }
 

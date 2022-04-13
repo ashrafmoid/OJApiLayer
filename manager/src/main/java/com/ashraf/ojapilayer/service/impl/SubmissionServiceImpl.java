@@ -39,7 +39,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 
     @Override
     @Transactional
-    public String submitSolution(SubmissionRequest request) {
+    public Submission submitSolution(SubmissionRequest request) {
         String fileId = documentService.uploadMultipartFile(FileUploadRequest.builder()
                 .multipartFile(request.getFile())
                 .fileType(Constant.TEXT_PLAIN_APPLICATION_TYPE.toString())
@@ -59,7 +59,7 @@ public class SubmissionServiceImpl implements SubmissionService {
             log.error("Exception value serializing submission {}", submission);
             throw new RuntimeException("Exception occurred while serializing value");
         }
-        return submission.getDocumentLink();
+        return submission;
 
     }
 
