@@ -1,14 +1,16 @@
 package com.ashraf.ojapilayer.config;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.core.DockerClientBuilder;
+
+import com.spotify.docker.client.DefaultDockerClient;
+import com.spotify.docker.client.DockerClient;
+import com.spotify.docker.client.exceptions.DockerCertificateException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DockerClientConfig {
     @Bean
-    public DockerClient getDockerClientJava() {
-        return DockerClientBuilder.getInstance().build();
+    public DockerClient getDockerClientJava() throws  DockerCertificateException {
+     return DefaultDockerClient.fromEnv().build();
     }
 }

@@ -16,4 +16,5 @@ public class ContainerCreationRequest {
     private String hostName;
     private String hostPort;
     private String containerPort;
+    private String command;
 }
