@@ -13,7 +13,7 @@ import java.util.List;
 public interface DockerManager {
     CreateContainerResponse createContainer(ContainerCreationRequest containerCreationRequest) throws DockerException, InterruptedException;
     List<Container> getAllContainersWithStatus(ContainerStatus status) throws DockerException, InterruptedException;
-    String buildImageFromFile(String filepath) throws DockerException, IOException, InterruptedException, URISyntaxException;
+    String buildImageFromFile(String filepath, String name) throws DockerException, IOException, InterruptedException, URISyntaxException;
     void startContainerWithId(String id) throws DockerException, InterruptedException;
     void stopContainerWithId(String id) throws DockerException, InterruptedException;
     void killContainerWithId(String id) throws DockerException, InterruptedException;

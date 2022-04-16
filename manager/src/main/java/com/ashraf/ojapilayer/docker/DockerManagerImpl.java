@@ -5,14 +5,13 @@ import com.ashraf.ojapilayer.models.Container;
 import com.ashraf.ojapilayer.models.ContainerCreationRequest;
 import com.ashraf.ojapilayer.models.CreateContainerResponse;
 import com.spotify.docker.client.DockerClient;
-import com.spotify.docker.client.ProgressHandler;
 import com.spotify.docker.client.exceptions.DockerException;
 import com.spotify.docker.client.messages.ContainerConfig;
 import com.spotify.docker.client.messages.ContainerCreation;
 import com.spotify.docker.client.messages.HostConfig;
 import com.spotify.docker.client.messages.PortBinding;
-import com.spotify.docker.client.messages.ProgressMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class DockerManagerImpl implements DockerManager {
 
     private final DockerClient dockerClient;
@@ -41,9 +41,7 @@ public class DockerManagerImpl implements DockerManager {
         final ContainerConfig containerConfig = ContainerConfig.builder().image(imageNameWithVersion)
                         .cmd(Objects.isNull(containerCreationRequest.getCommand()) ? StringUtils.EMPTY : containerCreationRequest.getCommand())
                 .hostConfig(HostConfig.builder().portBindings(portBindings).build()).build();
-
         final ContainerCreation containerCreation = dockerClient.createContainer(containerConfig);
-        System.out.println("containerCreation --> " + containerCreation);
         return CreateContainerResponse.builder().id(containerCreation.id()).warnings(containerCreation.warnings()).build();
     }
 
@@ -58,15 +56,10 @@ public class DockerManagerImpl implements DockerManager {
     }
 
     @Override
-    public String buildImageFromFile(String filepath) throws DockerException, IOException, InterruptedException, URISyntaxException {
+    public String buildImageFromFile(String filepath, String name) throws DockerException, IOException, InterruptedException, URISyntaxException {
        return dockerClient.build(
-               Paths.get(filepath), "test-container", new ProgressHandler() {
-                   @Override
-                   public void progress(ProgressMessage message) {
-                       final String imageId = message.buildImageId();
-                       System.out.println("imageId is -> " + imageId);
-                   }
-               });
+               Paths.get("/Users/ashrafmoid/Desktop/PersonalProject/OJApiLayer/"),
+               DockerClient.BuildParam.name(name), DockerClient.BuildParam.dockerfile(Paths.get(filepath)));
     }
 
     @Override

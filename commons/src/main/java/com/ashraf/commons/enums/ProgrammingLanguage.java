@@ -1,8 +1,8 @@
-package com.ashraf.ojapilayer.enums;
+package com.ashraf.commons.enums;
 
 public enum ProgrammingLanguage {
     C("c"),
-    CPP("c++"),
+    CPP("cpp"),
     JAVA("java");
 
     private final String value;

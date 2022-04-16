@@ -1,8 +1,9 @@
-package com.ashraf.ojapilayer.enums;
+package com.ashraf.commons.enums;
 
 public enum SubmissionStatus {
     QUEUED,
     TESTING,
     ACCEPTED,
-    REJECTED;
+    REJECTED,
+    ERROR;
 }

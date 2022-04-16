@@ -1,7 +1,7 @@
 package com.ashraf.ojapilayer.kafka.consumer;
 
 import com.ashraf.ojapilayer.entity.Submission;
-import com.ashraf.ojapilayer.enums.SubmissionStatus;
+import com.ashraf.commons.enums.SubmissionStatus;
 import com.ashraf.ojapilayer.service.EvaluationService;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;

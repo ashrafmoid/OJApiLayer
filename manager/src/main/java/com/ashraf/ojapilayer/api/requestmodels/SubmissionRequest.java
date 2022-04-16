@@ -1,6 +1,6 @@
 package com.ashraf.ojapilayer.api.requestmodels;
 
-import com.ashraf.ojapilayer.enums.ProgrammingLanguage;
+import com.ashraf.commons.enums.ProgrammingLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
