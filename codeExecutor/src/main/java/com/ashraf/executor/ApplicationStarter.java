@@ -9,7 +9,7 @@ public class ApplicationStarter {
     public static void main(String[] args) throws InterruptedException {
         final String language = ProgrammingLanguage.C.getValue();
         final CodeHandler codeHandler = CodeHandlerFactory.getCodeHandler(language);
-        codeHandler.executeCode(null);
+       // codeHandler.executeCode(null);
         System.out.println("executed class CodeExecutionService");
         Thread.sleep(50000);
     }

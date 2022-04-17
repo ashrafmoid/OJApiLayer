@@ -1,6 +1,7 @@
 package com.ashraf.ojapilayer.docker;
 
 import com.ashraf.ojapilayer.enums.ContainerStatus;
+import com.ashraf.ojapilayer.models.BuildImageCreationRequest;
 import com.ashraf.ojapilayer.models.Container;
 import com.ashraf.ojapilayer.models.ContainerCreationRequest;
 import com.ashraf.ojapilayer.models.CreateContainerResponse;
@@ -16,7 +17,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -56,10 +56,10 @@ public class DockerManagerImpl implements DockerManager {
     }
 
     @Override
-    public String buildImageFromFile(String filepath, String name) throws DockerException, IOException, InterruptedException, URISyntaxException {
-       return dockerClient.build(
-               Paths.get("/Users/ashrafmoid/Desktop/PersonalProject/OJApiLayer/"),
-               DockerClient.BuildParam.name(name), DockerClient.BuildParam.dockerfile(Paths.get(filepath)));
+    public String buildImageFromFile(BuildImageCreationRequest request) throws DockerException, IOException, InterruptedException {
+        return dockerClient.build(
+               Paths.get(request.getDockerContextPath()), progressMessage -> System.out.println("progress is" + progressMessage.progress()),
+               DockerClient.BuildParam.name(request.getImageName()));
     }
 
     @Override
