@@ -1,4 +1,4 @@
-package com.ashraf.commons.enums;
+package com.ashraf.executor.enums;
 
 public enum SubmissionStatus {
     QUEUED,
@@ -7,3 +7,4 @@ public enum SubmissionStatus {
     REJECTED,
     ERROR;
 }
+

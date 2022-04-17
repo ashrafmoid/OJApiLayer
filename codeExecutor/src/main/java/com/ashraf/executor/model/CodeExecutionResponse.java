@@ -1,6 +1,6 @@
-package com.ashraf.commons.models;
+package com.ashraf.executor.model;
 
-import com.ashraf.commons.enums.SubmissionStatus;
+import com.ashraf.executor.enums.SubmissionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -6,7 +6,7 @@ import com.ashraf.ojapilayer.constants.Constant;
 import com.ashraf.ojapilayer.entity.Question;
 import com.ashraf.ojapilayer.entity.Submission;
 import com.ashraf.ojapilayer.entity.UserProfile;
-import com.ashraf.commons.enums.SubmissionStatus;
+import com.ashraf.ojapilayer.enums.SubmissionStatus;
 import com.ashraf.ojapilayer.kafka.producer.KafkaProducer;
 import com.ashraf.ojapilayer.repository.SubmissionRepository;
 import com.ashraf.ojapilayer.service.DocumentService;

@@ -1,8 +1,7 @@
 package com.ashraf.executor.handler;
 
-
-import com.ashraf.commons.models.CodeExecutionRequest;
-import com.ashraf.commons.models.CodeExecutionResponse;
+import com.ashraf.executor.model.CodeExecutionRequest;
+import com.ashraf.executor.model.CodeExecutionResponse;
 
 public interface CodeHandler {
     CodeExecutionResponse executeCode(CodeExecutionRequest request);

@@ -1,4 +1,4 @@
-package com.ashraf.commons.models;
+package com.ashraf.ojapilayer.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

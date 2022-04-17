@@ -20,7 +20,6 @@
         <module>database</module>
         <module>manager</module>
         <module>codeExecutor</module>
-        <module>commons</module>
     </modules>
 
     <properties>

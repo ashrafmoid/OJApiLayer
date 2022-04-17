@@ -1,7 +1,7 @@
 package com.ashraf.ojapilayer.entity;
 
-import com.ashraf.commons.enums.ProgrammingLanguage;
-import com.ashraf.commons.enums.SubmissionStatus;
+import com.ashraf.ojapilayer.enums.ProgrammingLanguage;
+import com.ashraf.ojapilayer.enums.SubmissionStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

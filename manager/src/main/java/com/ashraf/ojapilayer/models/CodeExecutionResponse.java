@@ -1,6 +1,5 @@
-package com.ashraf.ojapilayer.DTO;
+package com.ashraf.ojapilayer.models;
 
-import com.ashraf.ojapilayer.enums.ProgrammingLanguage;
 import com.ashraf.ojapilayer.enums.SubmissionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +10,11 @@ import java.time.Duration;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class SubmissionDTO {
+@AllArgsConstructor
+public class CodeExecutionResponse {
     private SubmissionStatus status;
-    private String questionId;
-    private String authorId;
-    private ProgrammingLanguage language;
     private Duration executionTime;
     private Integer memory;
-    private String documentLink;
+    private String error;
 }
