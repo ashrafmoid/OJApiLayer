@@ -40,7 +40,9 @@ public class Question extends BaseEntity {
     private Long id;
 
     @Column
-    private String documentLink;
+    private String questionFileLink;
+
+    private String testFileLink;
 
     @Column
     @ManyToMany

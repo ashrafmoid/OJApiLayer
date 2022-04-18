@@ -1,5 +1,6 @@
 package com.ashraf.ojapilayer.service.impl;
 
+import com.ashraf.ojapilayer.DTO.KafkaSubmissionDTO;
 import com.ashraf.ojapilayer.api.requestmodels.FileUploadRequest;
 import com.ashraf.ojapilayer.api.requestmodels.SubmissionRequest;
 import com.ashraf.ojapilayer.constants.Constant;
@@ -45,7 +46,8 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .fileType(Constant.TEXT_PLAIN_APPLICATION_TYPE.toString())
                 .build());
         UserProfile userProfile = userManagementService.findUserById(Long.valueOf(request.getAuthorId()));
-        Question question = questionService.getQuestionById(Long.valueOf(request.getQuestionId()));
+        Question question = questionService.getQuestionById(Long.valueOf(request.getQuestionId()))
+                .orElseThrow();
         Submission submission = Submission.builder().documentLink(fileId)
                 .language(request.getLanguage())
                 .author(userProfile)
@@ -54,7 +56,9 @@ public class SubmissionServiceImpl implements SubmissionService {
                 .build();
         submission = submissionRepository.save(submission);
         try {
-            kafkaProducer.sendMessage(submissionTopic, objectMapper.writeValueAsString(submission));
+            kafkaProducer.sendMessage(submissionTopic, objectMapper.writeValueAsString(KafkaSubmissionDTO.builder()
+                    .submissionId(submission.getId()).submissionDocumentLink(submission.getDocumentLink())
+                    .questionId(request.getQuestionId()).build()));
         } catch (IOException e) {
             log.error("Exception value serializing submission {}", submission);
             throw new RuntimeException("Exception occurred while serializing value");

@@ -61,5 +61,12 @@
         <modifyDataType tableName="submission" columnName="language" newDataType="varchar"/>
     </changeSet>
 
+    <changeSet author="Ashraf" id = "202219040042">
+        <renameColumn tableName="question" oldColumnName="document_link" newColumnName="question_file_link"/>
+        <addColumn tableName="question">
+            <column name="test_file_link" type="varchar"></column>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

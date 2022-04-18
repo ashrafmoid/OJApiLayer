@@ -1,11 +1,11 @@
 package com.ashraf.ojapilayer.service.impl;
 
+import com.ashraf.ojapilayer.api.requestmodels.AddQuestionRequest;
 import com.ashraf.ojapilayer.api.requestmodels.FileUploadRequest;
 import com.ashraf.ojapilayer.api.requestmodels.Tags;
 import com.ashraf.ojapilayer.entity.Question;
 import com.ashraf.ojapilayer.entity.UserProfile;
 import com.ashraf.ojapilayer.mapper.QuestionMapper;
-import com.ashraf.ojapilayer.models.QuestionMetaData;
 import com.ashraf.ojapilayer.repository.QuestionRepository;
 import com.ashraf.ojapilayer.service.DocumentService;
 import com.ashraf.ojapilayer.service.QuestionService;
@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -29,13 +30,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public Question addQuestion(MultipartFile file, QuestionMetaData metaData) {
+    public Question addQuestion(AddQuestionRequest request) {
         final String id = documentService.uploadMultipartFile(FileUploadRequest.builder()
-                .multipartFile(file).fileType(metaData.getFileType()).build());
-        final List<UserProfile> userProfiles = userManagementService.findAllUserById(metaData.getAuthorId());
-        final Question question = Question.builder().documentLink(id)
-                .rating(metaData.getRating())
-                .topics(metaData.getTopics())
+                .multipartFile(request.getTestFile()).fileType(request.getQuestionMetaData().getFileType()).build());
+        final List<UserProfile> userProfiles = userManagementService.findAllUserById(request.getQuestionMetaData().getAuthorId());
+        final Question question = Question.builder().questionFileLink(id)
+                .rating(request.getQuestionMetaData().getRating())
+                .topics(request.getQuestionMetaData().getTopics())
                 .authors(userProfiles)
                 .build();
         return questionRepository.save(question);
@@ -43,8 +44,20 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getQuestionById(Long id) {
-        return questionRepository.findById(id).orElse(null);
+    public Optional<Question> getQuestionById(Long id) {
+        return questionRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public Question addTestFile(String questionId, MultipartFile testFile) {
+        final Question question = questionRepository.findById(Long.valueOf(questionId))
+                .orElseThrow(() -> new RuntimeException("Question not found for id " + questionId));
+        String id = documentService.uploadMultipartFile(FileUploadRequest.builder()
+                .multipartFile(testFile).fileType("txt")
+                .build());
+        question.setTestFileLink(id);
+        return questionRepository.save(question);
     }
 
     @Override

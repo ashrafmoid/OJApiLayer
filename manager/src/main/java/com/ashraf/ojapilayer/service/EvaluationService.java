@@ -1,7 +1,7 @@
 package com.ashraf.ojapilayer.service;
 
-import com.ashraf.ojapilayer.entity.Submission;
+import com.ashraf.ojapilayer.DTO.KafkaSubmissionDTO;
 
 public interface EvaluationService {
-    void evaluateSubmission(Submission submission);
+    void evaluateSubmission(KafkaSubmissionDTO kafkaSubmissionDTO);
 }

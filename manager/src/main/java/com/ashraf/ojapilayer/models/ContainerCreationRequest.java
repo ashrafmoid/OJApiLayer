@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,6 +18,6 @@ public class ContainerCreationRequest {
     private String hostName;
     private String hostPort;
     private String containerPort;
-    private String command;
+    private List<String> command;
     private String volume;
 }

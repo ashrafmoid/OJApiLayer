@@ -43,9 +43,10 @@ public class DockerManagerImpl implements DockerManager {
                 .to(dockerMountPath)
                 .build();
         final ContainerConfig containerConfig = ContainerConfig.builder().image(imageNameWithVersion)
-                        .cmd(Objects.isNull(containerCreationRequest.getCommand()) ? StringUtils.EMPTY : containerCreationRequest.getCommand())
+                        .cmd(containerCreationRequest.getCommand())
                 .hostConfig(HostConfig.builder().portBindings(portBindings).appendBinds(bind).build())
-                .volumes(containerCreationRequest.getVolume()).build();
+                .volumes(containerCreationRequest.getVolume())
+                .build();
         final ContainerCreation containerCreation = dockerClient.createContainer(containerConfig);
         return CreateContainerResponse.builder().id(containerCreation.id()).warnings(containerCreation.warnings()).build();
     }
