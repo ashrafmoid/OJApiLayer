@@ -12,7 +12,6 @@ import com.ashraf.ojapilayer.service.EvaluationService;
 import com.spotify.docker.client.exceptions.DockerException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -29,21 +28,29 @@ public class EvaluationServiceImpl implements EvaluationService {
     private final DocumentService documentService;
     @Value("${docker.file.context.path}")
     private String dockerContextPath;
+    @Value("${local.submission.copy.dir}")
+    private String localSubmissionCopyDir;
+
+    private static final String CODE_EXECUTOR_IMAGE_FORMAT = "code-executor-%s";
+    private static final String IMAGE_VERSION = "latest";
 
     @Override
     public void evaluateSubmission(Submission submission) {
         log.info("Evaluating Submission {}", submission);
         FileStore fileStore = documentService.getDocument(submission.getDocumentLink());
-        File file = saveToTempFile(fileStore, submission.getLanguage());
+        saveToFile(fileStore, submission.getLanguage(), submission);
         try {
+            final String imageName = String.format(CODE_EXECUTOR_IMAGE_FORMAT, submission.getId());
             final String imageId = dockerManager.buildImageFromFile(
-                    BuildImageCreationRequest.builder().imageName("code-executor-" + submission.getId())
+                    BuildImageCreationRequest.builder().imageName(imageName)
                             .dockerContextPath(dockerContextPath).build());
             log.info("Image id {}", imageId);
             CreateContainerResponse response = dockerManager.createContainer(ContainerCreationRequest.builder()
-                    .imageName("code-executor-" + submission.getId())
-                            .imageVersion("latest")
-                    .containerPort("8065").hostPort("8097").name("code-executor-container-" + submission.getId()).build());
+                    .imageName(imageName)
+                            .imageVersion(IMAGE_VERSION)
+                    .containerPort("8065").hostPort("8097").name("code-executor-container-" + submission.getId())
+                    .volume(localSubmissionCopyDir).build());
+
             log.info("CreateContainerResponse --> {}", response);
             dockerManager.startContainerWithId(response.getId());
         }catch (IOException | DockerException | InterruptedException | URISyntaxException e) {
@@ -52,17 +59,22 @@ public class EvaluationServiceImpl implements EvaluationService {
         }
     }
 
-    private File saveToTempFile(FileStore fileStore, ProgrammingLanguage language) {
-        File tempFile = null;
+    private void saveToFile(FileStore fileStore, ProgrammingLanguage language, Submission submission) {
+        log.info(localSubmissionCopyDir);
+        File tempFile = new File(localSubmissionCopyDir + submission.getId() + "/" + "Main." + language.getValue());
         try {
-            tempFile = File.createTempFile(RandomStringUtils.randomAlphabetic(6), "." + language.getValue());
-            try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
+            tempFile.getParentFile().mkdirs();
+            tempFile.createNewFile();
+        } catch (IOException e) {
+            log.info("File already exists, skipping file creation");
+        }
+        try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
                 outputStream.write(fileStore.getData());
-            }
+                log.info("writing done!!");
         } catch (IOException e) {
             log.error("Exception while writing file to temp location");
             throw new RuntimeException(e);
         }
-        return tempFile;
+        log.info(tempFile);
     }
 }

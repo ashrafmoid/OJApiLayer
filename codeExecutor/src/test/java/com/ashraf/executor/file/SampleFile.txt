@@ -1,0 +1,4 @@
+test file begin
+new line
+one more new line
+end of file

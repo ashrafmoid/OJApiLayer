@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class DockerManagerImpl implements DockerManager {
 
     private final DockerClient dockerClient;
+    private static final String dockerMountPath = "/usr/local/submission/";
 
     @Override
     public CreateContainerResponse createContainer(ContainerCreationRequest containerCreationRequest) throws DockerException, InterruptedException {
@@ -38,9 +39,13 @@ public class DockerManagerImpl implements DockerManager {
                         ":" + containerCreationRequest.getImageVersion() : StringUtils.EMPTY);
         final Map<String, List<PortBinding>> portBindings = new HashMap<>();
         portBindings.put(containerCreationRequest.getContainerPort(), List.of(PortBinding.of("0.0.0.0", containerCreationRequest.getHostPort())));
+        final HostConfig.Bind bind = HostConfig.Bind.from(containerCreationRequest.getVolume())
+                .to(dockerMountPath)
+                .build();
         final ContainerConfig containerConfig = ContainerConfig.builder().image(imageNameWithVersion)
                         .cmd(Objects.isNull(containerCreationRequest.getCommand()) ? StringUtils.EMPTY : containerCreationRequest.getCommand())
-                .hostConfig(HostConfig.builder().portBindings(portBindings).build()).build();
+                .hostConfig(HostConfig.builder().portBindings(portBindings).appendBinds(bind).build())
+                .volumes(containerCreationRequest.getVolume()).build();
         final ContainerCreation containerCreation = dockerClient.createContainer(containerConfig);
         return CreateContainerResponse.builder().id(containerCreation.id()).warnings(containerCreation.warnings()).build();
     }
@@ -58,7 +63,7 @@ public class DockerManagerImpl implements DockerManager {
     @Override
     public String buildImageFromFile(BuildImageCreationRequest request) throws DockerException, IOException, InterruptedException {
         return dockerClient.build(
-               Paths.get(request.getDockerContextPath()), progressMessage -> System.out.println("progress is" + progressMessage.progress()),
+                Paths.get(request.getDockerContextPath()), progressMessage -> {},
                DockerClient.BuildParam.name(request.getImageName()));
     }
 

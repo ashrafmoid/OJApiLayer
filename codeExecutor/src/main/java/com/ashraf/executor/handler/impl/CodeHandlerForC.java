@@ -3,7 +3,7 @@ package com.ashraf.executor.handler.impl;
 import com.ashraf.executor.handler.CodeHandler;
 import com.ashraf.executor.model.CodeExecutionRequest;
 import com.ashraf.executor.model.CodeExecutionResponse;
-import com.ashraf.executor.util.TestFileReaderUtil;
+import com.ashraf.executor.util.FileReaderUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -30,7 +30,7 @@ public class CodeHandlerForC implements CodeHandler {
             executor.execute(compileCmdLine);
             String runCmd = dir.getParent() + "/" + exeName;
             CommandLine runCmdLine = CommandLine.parse(runCmd);
-            String inputArg = TestFileReaderUtil.getTestFileAsString(request.getTestFilePath());
+            String inputArg = FileReaderUtil.getFileAsString(request.getTestFilePath());
             ByteArrayInputStream input = new ByteArrayInputStream(inputArg.getBytes(StandardCharsets.ISO_8859_1));
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             executor.setStreamHandler(new PumpStreamHandler(output, null, input));
