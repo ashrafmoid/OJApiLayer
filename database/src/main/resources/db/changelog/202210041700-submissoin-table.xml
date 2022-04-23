@@ -68,5 +68,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="Ashraf" id = "202223041715">
+        <addColumn tableName="question">
+            <column name="correct_output_file_link" type="varchar"></column>
+        </addColumn>
+    </changeSet>
+
 
 </databaseChangeLog>

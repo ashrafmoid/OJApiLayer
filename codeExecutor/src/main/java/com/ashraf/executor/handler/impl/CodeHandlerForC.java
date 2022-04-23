@@ -8,14 +8,16 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Log4j2
+@Component("c")
 public class CodeHandlerForC implements CodeHandler {
     @Override
     public CodeExecutionResponse executeCode(CodeExecutionRequest request) {
@@ -32,10 +34,9 @@ public class CodeHandlerForC implements CodeHandler {
             CommandLine runCmdLine = CommandLine.parse(runCmd);
             String inputArg = FileReaderUtil.getFileAsString(request.getTestFilePath());
             ByteArrayInputStream input = new ByteArrayInputStream(inputArg.getBytes(StandardCharsets.ISO_8859_1));
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            FileOutputStream output = new FileOutputStream(request.getCodeFilePath().substring(0, request.getCodeFilePath().lastIndexOf("/")) + "/output.txt");
             executor.setStreamHandler(new PumpStreamHandler(output, null, input));
             executor.execute(runCmdLine);
-            System.out.println("result: " + output.toString(StandardCharsets.ISO_8859_1));
         } catch (IOException e) {
             log.error("Exception while executing program!!");
             throw new RuntimeException(e);

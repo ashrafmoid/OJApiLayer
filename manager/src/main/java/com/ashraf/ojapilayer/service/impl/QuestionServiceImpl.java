@@ -61,6 +61,17 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public Question addOutputFile(String questionId, MultipartFile outputFile) {
+        final Question question = questionRepository.findById(Long.valueOf(questionId))
+                .orElseThrow(() -> new RuntimeException("Question not found for id " + questionId));
+        String id = documentService.uploadMultipartFile(FileUploadRequest.builder()
+                .multipartFile(outputFile).fileType("txt")
+                .build());
+        question.setCorrectOutputFileLink(id);
+        return questionRepository.save(question);
+    }
+
+    @Override
     public List<Question> getQuestionsByTag(Tags tags) {
         return null;
     }

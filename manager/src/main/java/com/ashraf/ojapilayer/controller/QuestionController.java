@@ -27,11 +27,13 @@ public class QuestionController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addQuestion(@RequestPart(value = "file")MultipartFile file,
                                          @RequestPart(value = "metaData") QuestionMetaData metaData,
-                                         @RequestPart(value = "testFile", required = false) MultipartFile testFile) {
+                                         @RequestPart(value = "testFile", required = false) MultipartFile testFile,
+                                         @RequestPart(value = "outputFile", required = false) MultipartFile outputFile) {
         QuestionDTO questionDTO = questionMapper.questionToQuestionDTO(
                 questionService.addQuestion(AddQuestionRequest.builder().questionFile(file)
                         .questionMetaData(metaData)
-                        .testFile(testFile).build()));
+                        .testFile(testFile)
+                        .outputFile(outputFile).build()));
         return ResponseEntity.ok(questionDTO);
     }
 
@@ -45,6 +47,13 @@ public class QuestionController {
     public ResponseEntity<?> addTestFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
                                                    @PathVariable("questionId") String questionId) {
         return ResponseEntity.ok(questionMapper.questionToQuestionDTO(questionService.addTestFile(questionId, testFile)));
+
+    }
+
+    @PatchMapping(path = "/{questionId}/add/outputFile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addOutputFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
+                                                   @PathVariable("questionId") String questionId) {
+        return ResponseEntity.ok(questionMapper.questionToQuestionDTO(questionService.addOutputFile(questionId, testFile)));
 
     }
 

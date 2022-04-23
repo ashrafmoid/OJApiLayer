@@ -18,4 +18,6 @@ public interface DockerManager {
     void startContainerWithId(String id) throws DockerException, InterruptedException;
     void stopContainerWithId(String id) throws DockerException, InterruptedException;
     void killContainerWithId(String id) throws DockerException, InterruptedException;
+
+    boolean isContainerRunning(String containerId) throws DockerException, InterruptedException;
 }

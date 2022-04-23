@@ -44,6 +44,8 @@ public class Question extends BaseEntity {
 
     private String testFileLink;
 
+    private String correctOutputFileLink;
+
     @Column
     @ManyToMany
     @JoinTable(

@@ -3,6 +3,7 @@ package com.ashraf.ojapilayer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.ashraf.ojapilayer"})
 @EnableEnversRepositories
+@Log4j2
 public class ApplicationStarter {
     @Value("#{'${kafka.topic.list}'.split(',')}")
     private List<String> topics;
@@ -43,7 +45,7 @@ public class ApplicationStarter {
         return args -> {
             AdminClient admin = AdminClient.create(kafkaAdmin.getConfig());
             Set<String> allExistingTopics = admin.listTopics().names().get();
-            System.out.println("Existing topics " + allExistingTopics);
+            log.info("Existing topics " + allExistingTopics);
             List<NewTopic> DLTTopics = topics.stream()
                     .filter(dltTopic -> !allExistingTopics.contains(dltTopic + ".DLT"))
                     .map(topic -> new NewTopic(topic + ".DLT", 1, (short) 1))

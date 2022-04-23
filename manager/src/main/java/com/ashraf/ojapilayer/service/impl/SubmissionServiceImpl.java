@@ -9,6 +9,7 @@ import com.ashraf.ojapilayer.entity.Submission;
 import com.ashraf.ojapilayer.entity.UserProfile;
 import com.ashraf.ojapilayer.enums.SubmissionStatus;
 import com.ashraf.ojapilayer.kafka.producer.KafkaProducer;
+import com.ashraf.ojapilayer.models.CodeExecutionResponse;
 import com.ashraf.ojapilayer.repository.SubmissionRepository;
 import com.ashraf.ojapilayer.service.DocumentService;
 import com.ashraf.ojapilayer.service.QuestionService;
@@ -17,6 +18,7 @@ import com.ashraf.ojapilayer.service.UserManagementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.kafka.common.errors.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -70,5 +72,16 @@ public class SubmissionServiceImpl implements SubmissionService {
     @Override
     public Optional<Submission> getSubmissionById(String id) {
         return submissionRepository.findById(Long.valueOf(id));
+    }
+
+    @Override
+    public void updateSubmissionResult(CodeExecutionResponse response, Long submissionId) {
+        Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
+                new InvalidRequestException("No submission found for id " + submissionId));
+        submission.setStatus(response.getStatus());
+        submission.setExecutionTime(response.getExecutionTime());
+        submission.setMemory(response.getMemory());
+        submissionRepository.save(submission);
+
     }
 }

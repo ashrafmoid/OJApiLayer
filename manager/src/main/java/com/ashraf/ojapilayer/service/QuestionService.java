@@ -12,6 +12,7 @@ public interface QuestionService {
     Question addQuestion(AddQuestionRequest request);
     Optional<Question> getQuestionById(Long id);
     Question addTestFile(String questionId, MultipartFile testFile);
+    Question addOutputFile(String questionId, MultipartFile outputFile);
     // this needs to be paginated
     List<Question> getQuestionsByTag(Tags tags);
 

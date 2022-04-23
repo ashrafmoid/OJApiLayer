@@ -15,4 +15,5 @@ public class AddQuestionRequest {
     private MultipartFile questionFile;
     private MultipartFile testFile;
     private QuestionMetaData questionMetaData;
+    private MultipartFile outputFile;
 }

@@ -83,4 +83,10 @@ public class DockerManagerImpl implements DockerManager {
     public void killContainerWithId(String id) throws DockerException, InterruptedException {
         dockerClient.killContainer(id);
     }
+
+    @Override
+    public boolean isContainerRunning(String containerId) throws DockerException, InterruptedException {
+       return dockerClient.listContainers(DockerClient.ListContainersParam.withStatusRunning())
+                .stream().anyMatch(container -> containerId.equals(container.id()));
+    }
 }
