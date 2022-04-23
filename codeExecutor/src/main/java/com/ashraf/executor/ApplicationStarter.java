@@ -4,11 +4,9 @@ import com.ashraf.executor.factory.CodeHandlerFactory;
 import com.ashraf.executor.handler.CodeHandler;
 import com.ashraf.executor.model.CodeExecutionRequest;
 
-import java.io.IOException;
-
 public class ApplicationStarter {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) {
         final String submissionFolder = "/usr/local/submission/" + args[0];
         final String language = args[1];
         final CodeHandler codeHandler = CodeHandlerFactory.getCodeHandler(language);
