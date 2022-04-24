@@ -75,6 +75,7 @@ public class SubmissionServiceImpl implements SubmissionService {
     }
 
     @Override
+    @Transactional
     public void updateSubmissionResult(CodeExecutionResponse response, Long submissionId) {
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new InvalidRequestException("No submission found for id " + submissionId));
@@ -83,5 +84,10 @@ public class SubmissionServiceImpl implements SubmissionService {
         submission.setMemory(response.getMemory());
         submissionRepository.save(submission);
 
+    }
+
+    @Override
+    public void saveSubmission(Submission submission) {
+        submissionRepository.save(submission);
     }
 }

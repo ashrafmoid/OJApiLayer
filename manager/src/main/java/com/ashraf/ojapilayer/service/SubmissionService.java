@@ -10,4 +10,5 @@ public interface SubmissionService {
     Submission submitSolution(SubmissionRequest request);
     Optional<Submission> getSubmissionById(String id);
     void updateSubmissionResult(CodeExecutionResponse response, Long submissionId);
+    void saveSubmission(Submission submission);
 }

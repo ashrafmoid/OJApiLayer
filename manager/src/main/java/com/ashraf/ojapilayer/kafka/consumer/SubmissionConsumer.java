@@ -36,6 +36,15 @@ public class SubmissionConsumer {
             log.info("Event for submission with id {} already processed", submission.getId());
             return;
         }
-        evaluationService.evaluateSubmission(kafkaSubmissionDTO);
+        try {
+            submission.setStatus(SubmissionStatus.TESTING);
+            submissionService.saveSubmission(submission);
+            evaluationService.evaluateSubmission(kafkaSubmissionDTO);
+        } catch (Exception e) {
+            submission = submissionService.getSubmissionById(String.valueOf(submission.getId())).orElseThrow();
+            submission.setStatus(SubmissionStatus.QUEUED);
+            submissionService.saveSubmission(submission);
+            throw e;
+        }
     }
 }

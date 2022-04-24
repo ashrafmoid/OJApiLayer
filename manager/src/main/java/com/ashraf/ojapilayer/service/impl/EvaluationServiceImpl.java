@@ -44,7 +44,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     @Value("${local.submission.copy.dir}")
     private String localSubmissionCopyDir;
 
-    private static final String CODE_EXECUTOR_IMAGE_FORMAT = "code-executor-%s";
+    private static final String CODE_EXECUTOR_IMAGE_FORMAT = "code/executor";
     private static final String IMAGE_VERSION = "latest";
 
     @Override
@@ -56,16 +56,17 @@ public class EvaluationServiceImpl implements EvaluationService {
         log.info("Evaluating Submission {}", submission);
         saveRequiredFilesOnDisk(submission, question);
         try {
+            // Container is started in detached mode
             String containerId = startContainerForCodeExecution(submission);
             // wait for some time for container to finish execution
             waitWhileContainerIsRunning(containerId);
+            log.info("Container finished execution!!");
             waitWhileFileIsNotAvailable(submission);
-           CodeExecutionResponse response = codeEvaluator.evaluateCode(CodeEvaluationRequest.builder()
+            CodeExecutionResponse response = codeEvaluator.evaluateCode(CodeEvaluationRequest.builder()
                     .correctOutputFilePath(localSubmissionCopyDir + submission.getId() + "/answer.txt")
                     .userGeneratedOutputFilePath(localSubmissionCopyDir + submission.getId() + "/output.txt").build());
-           log.info("CodeExecutionResponse is {}", response);
-           submissionService.updateSubmissionResult(response, submission.getId());
-
+            log.info("CodeExecutionResponse is {}", response);
+            submissionService.updateSubmissionResult(response, submission.getId());
         }catch (IOException | DockerException | InterruptedException | URISyntaxException e) {
             log.error("Error while building container!!!", e);
             throw new RuntimeException(e);
@@ -73,12 +74,27 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     private void waitWhileFileIsNotAvailable(Submission submission) {
+        Long startTime = System.currentTimeMillis();
         Path outputPath = Paths.get (localSubmissionCopyDir + submission.getId() + "/output.txt");
-        while (!Files.exists(outputPath) && !Files.isDirectory(outputPath)) {}
+        while (!Files.exists(outputPath) && !Files.isDirectory(outputPath)) {
+            Long time = System.currentTimeMillis();
+            if (time - startTime > 1000) {
+                log.error("File sync taking more than expected time, failing!!!");
+                throw new RuntimeException("File sync taking more than expected time");
+            }
+        }
     }
 
     private void waitWhileContainerIsRunning(String containerId) throws DockerException, InterruptedException {
-        while(dockerManager.isContainerRunning(containerId)) {}
+        Long startTime = System.currentTimeMillis();
+        while(dockerManager.isContainerRunning(containerId)) {
+            Long time = System.currentTimeMillis();
+            if (time- startTime > 50000) {
+                log.error("Container running for more than 5 minutes, something is wrong!! Killing container");
+                dockerManager.stopContainerWithId(containerId);
+                throw new RuntimeException("Container running for more than 5 minutes, something is wrong!!");
+            }
+        }
     }
 
     private void saveRequiredFilesOnDisk(Submission submission, Question question) {
@@ -91,15 +107,14 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     private String startContainerForCodeExecution(Submission submission) throws DockerException, IOException, URISyntaxException, InterruptedException {
-        final String imageName = String.format(CODE_EXECUTOR_IMAGE_FORMAT, submission.getId());
+        final String imageName = CODE_EXECUTOR_IMAGE_FORMAT + ":" + IMAGE_VERSION;
         final String imageId = dockerManager.buildImageFromFile(
                 BuildImageCreationRequest.builder().imageName(imageName)
                         .dockerContextPath(dockerContextPath).build());
         log.info("Image id {}", imageId);
         CreateContainerResponse response = dockerManager.createContainer(ContainerCreationRequest.builder()
                 .imageName(imageName)
-                .imageVersion(IMAGE_VERSION)
-                .containerPort("8065").hostPort("8097").name("code-executor-container-" + submission.getId() +" " +
+                .containerPort("8065").hostPort("8096").name("code-executor-container-" + submission.getId() +" " +
                         submission.getLanguage().getValue())
                 .command(List.of("java", "-jar", "codeExecutor-1.0-SNAPSHOT.jar",
                         String.valueOf(submission.getId()), submission.getLanguage().getValue()))

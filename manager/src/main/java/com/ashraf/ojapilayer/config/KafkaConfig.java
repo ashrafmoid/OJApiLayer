@@ -77,6 +77,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setConcurrency(3);
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.RECORD);
         SeekToCurrentErrorHandler errorHandler = new SeekToCurrentErrorHandler(new DeadLetterPublishingRecoverer(kafkaTemplate()),
                 new FixedBackOff(1L, consumerRetryAttempts));

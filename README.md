@@ -11,3 +11,9 @@ First layer of interaction from clients
 
 #### Spotify java client
 * repo link :- https://github.com/spotify/docker-client
+
+#### Common know Problems
+* If error related to building images is observed with `connection refused to localhost:80`,
+  then try cleaning all non-essential docker images and restart laptop once.
+
+#### Single testfile per question is allowed, and different test case should have 1 line gap

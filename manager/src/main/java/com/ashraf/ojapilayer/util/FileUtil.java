@@ -5,10 +5,9 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 
 @Log4j2
 public class FileUtil {
@@ -28,9 +27,9 @@ public class FileUtil {
     }
     public static boolean areFileContentsSame(File file1, File file2) {
         try {
-            InputStream inputStream1 = new FileInputStream(file1);
-            InputStream inputStream2 = new FileInputStream(file2);
-            return IOUtils.contentEquals(inputStream1, inputStream2);
+            Reader reader1 = new BufferedReader(new FileReader(file1));
+            Reader reader2 = new BufferedReader(new FileReader(file2));
+            return IOUtils.contentEqualsIgnoreEOL(reader1, reader2);
         } catch (IOException e) {
             throw new RuntimeException("Exception while comparing files!!", e);
         }

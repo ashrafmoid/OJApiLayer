@@ -52,10 +52,12 @@ public class ApplicationStarter {
                     .collect(Collectors.toList());
             List<NewTopic> newTopics = topics.stream()
                     .filter(normalTopic -> !allExistingTopics.contains(normalTopic))
-                    .map(topic -> new NewTopic(topic , 1, (short) 1))
+                    .map(topic -> new NewTopic(topic , 3, (short) 1))
                     .collect(Collectors.toList());
-            admin.createTopics(DLTTopics).all().get();
-            admin.createTopics(newTopics).all().get();
+            if (DLTTopics.size() !=0)
+                admin.createTopics(DLTTopics).all().get();
+            if (newTopics.size() !=0)
+                admin.createTopics(newTopics).all().get();
         };
     }
 }
