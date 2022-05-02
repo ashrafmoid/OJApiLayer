@@ -2,6 +2,7 @@ package com.ashraf.ojapilayer.controller;
 
 import com.ashraf.ojapilayer.DTO.QuestionDTO;
 import com.ashraf.ojapilayer.api.requestmodels.AddQuestionRequest;
+import com.ashraf.ojapilayer.api.requestmodels.FilterQueryRequest;
 import com.ashraf.ojapilayer.mapper.QuestionMapper;
 import com.ashraf.ojapilayer.models.QuestionMetaData;
 import com.ashraf.ojapilayer.service.QuestionService;
@@ -12,14 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/question")
+@RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
@@ -57,6 +60,30 @@ public class QuestionController {
 
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllQuestions(
+            @RequestParam(name = "page", defaultValue= "0") Integer pageNumber,
+            @RequestParam(name = "size", defaultValue = "40")Integer size) {
+        return ResponseEntity.ok(questionService.getAllQuestionsForPage(pageNumber, size));
+    }
 
+    @GetMapping("/filter")
+    public ResponseEntity<?> getQuestionsByFilter(
+            @RequestParam("query")String queryString,
+            @RequestParam(value = "pageNumber" , defaultValue = "0") Integer pageNumber,
+            @RequestParam(value = "size", defaultValue = "40") Integer size
+    ) {
+        FilterQueryRequest filterQueryRequest = FilterQueryRequest.builder().query(queryString)
+                .pageNumber(pageNumber).size(size).build();
+        return ResponseEntity.ok(questionService.getAllQuestionByFilter(filterQueryRequest));
+    }
+
+    @PatchMapping("/{questionId}")
+    public ResponseEntity<?> updateQuestionMetaData(
+            @RequestBody QuestionMetaData questionMetaData,
+            @PathVariable("questionId") String questionId) {
+        return ResponseEntity.ok(questionMapper.questionToQuestionDTO(
+                questionService.updateQuestionMetaData(questionMetaData, questionId)));
+    }
 
 }

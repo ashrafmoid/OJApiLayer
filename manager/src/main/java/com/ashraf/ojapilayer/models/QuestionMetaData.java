@@ -1,5 +1,6 @@
 package com.ashraf.ojapilayer.models;
 
+import com.ashraf.ojapilayer.enums.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionMetaData {
-    private List<String> topics;
+    private List<Topic> topics;
     private Integer rating;
-    private List<String> authorId;
+    private List<String> authorIds;
     private String fileType;
+    private String questionName;
 }

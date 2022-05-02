@@ -1,7 +1,5 @@
 package com.ashraf.ojapilayer.DTO;
 
-import com.ashraf.ojapilayer.entity.UserProfile;
-import com.ashraf.ojapilayer.enums.Topic;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDTO {
-    private String documentLink;
-    private List<Topic> topics;
+    private List<String> topics;
     private Integer rating;
     private List<UserProfileDTO> authors;
+    private String questionName;
+    private String questionFileLink;
 }

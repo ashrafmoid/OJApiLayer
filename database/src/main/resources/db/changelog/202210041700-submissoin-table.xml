@@ -64,15 +64,20 @@
     <changeSet author="Ashraf" id = "202219040042">
         <renameColumn tableName="question" oldColumnName="document_link" newColumnName="question_file_link"/>
         <addColumn tableName="question">
-            <column name="test_file_link" type="varchar"></column>
+            <column name="test_file_link" type="varchar"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="Ashraf" id = "202223041715">
         <addColumn tableName="question">
-            <column name="correct_output_file_link" type="varchar"></column>
+            <column name="correct_output_file_link" type="varchar"/>
         </addColumn>
     </changeSet>
 
+    <changeSet author="Ashraf" id = "202225040251">
+        <addColumn tableName="question">
+            <column name="question_name" type="varchar"/>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
