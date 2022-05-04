@@ -43,7 +43,7 @@ public class DockerManagerImpl implements DockerManager {
                 .to(dockerMountPath)
                 .build();
         final ContainerConfig containerConfig = ContainerConfig.builder().image(imageNameWithVersion)
-                        .cmd(containerCreationRequest.getCommand())
+                        .cmd(containerCreationRequest.getCommand()).networkDisabled(true)
                 .hostConfig(HostConfig.builder().portBindings(portBindings).appendBinds(bind).build())
                 .volumes(containerCreationRequest.getVolume())
                 .build();
