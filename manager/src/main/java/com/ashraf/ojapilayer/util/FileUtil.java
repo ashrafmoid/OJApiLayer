@@ -8,10 +8,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Log4j2
 public class FileUtil {
     public static String getFileAsString(String filepath) throws IOException {
+        if (!Files.exists(Path.of(filepath))) {
+            return "";
+        }
         File file = new File(filepath);
         BufferedReader br = new BufferedReader(new FileReader(file));
         String result = "";
@@ -21,7 +26,8 @@ public class FileUtil {
         // Condition holds true till
         // there is character in a string
         while ((st = br.readLine()) != null) {
-            result = result.concat(st + "\n");
+            if (!result.isEmpty()) result = result.concat("\n");
+            result = result.concat(st);
         }
         return result;
     }

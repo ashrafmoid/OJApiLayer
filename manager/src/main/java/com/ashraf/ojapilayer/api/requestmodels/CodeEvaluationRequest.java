@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class CodeEvaluationRequest {
     private String userGeneratedOutputFilePath;
     private String correctOutputFilePath;
+    private String errorFilePath;
+    private String errorMsgFilePath;
 }

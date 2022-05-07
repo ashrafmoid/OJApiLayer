@@ -43,6 +43,8 @@ public class EvaluationServiceImpl implements EvaluationService {
     private String dockerContextPath;
     @Value("${local.submission.copy.dir}")
     private String localSubmissionCopyDir;
+    @Value("${time.limit.per.testcase}")
+    private String timeLimitPerTestCase;
 
     private static final String CODE_EXECUTOR_IMAGE_FORMAT = "code/executor";
     private static final String IMAGE_VERSION = "latest";
@@ -64,10 +66,13 @@ public class EvaluationServiceImpl implements EvaluationService {
             waitWhileFileIsNotAvailable(submission);
             CodeExecutionResponse response = codeEvaluator.evaluateCode(CodeEvaluationRequest.builder()
                     .correctOutputFilePath(localSubmissionCopyDir + submission.getId() + "/answer.txt")
-                    .userGeneratedOutputFilePath(localSubmissionCopyDir + submission.getId() + "/output.txt").build());
+                    .userGeneratedOutputFilePath(localSubmissionCopyDir + submission.getId() + "/output.txt")
+                    .errorFilePath(localSubmissionCopyDir + submission.getId() + "/error.txt")
+                    .errorMsgFilePath(localSubmissionCopyDir + submission.getId() + "/error-msg.txt")
+                    .build());
             log.info("CodeExecutionResponse is {}", response);
             submissionService.updateSubmissionResult(response, submission.getId());
-        }catch (IOException | DockerException | InterruptedException | URISyntaxException e) {
+        } catch (IOException | DockerException | InterruptedException | URISyntaxException e) {
             log.error("Error while building container!!!", e);
             throw new RuntimeException(e);
         }
@@ -76,7 +81,9 @@ public class EvaluationServiceImpl implements EvaluationService {
     private void waitWhileFileIsNotAvailable(Submission submission) {
         Long startTime = System.currentTimeMillis();
         Path outputPath = Paths.get (localSubmissionCopyDir + submission.getId() + "/output.txt");
-        while (!Files.exists(outputPath) && !Files.isDirectory(outputPath)) {
+        Path errorPath = Paths.get(localSubmissionCopyDir + submission.getId() + "/error.txt");
+        while ((!Files.exists(outputPath) && !Files.isDirectory(outputPath)) &&
+                (!Files.exists(errorPath) && !Files.isDirectory(errorPath))) {
             Long time = System.currentTimeMillis();
             if (time - startTime > 1000) {
                 log.error("File sync taking more than expected time, failing!!!");
@@ -117,7 +124,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                 .containerPort("8065").hostPort("8096").name("code-executor-container-" + submission.getId() +" " +
                         submission.getLanguage().getValue())
                 .command(List.of("java", "-jar", "codeExecutor-1.0-SNAPSHOT.jar",
-                        String.valueOf(submission.getId()), submission.getLanguage().getValue()))
+                        String.valueOf(submission.getId()), submission.getLanguage().getValue(), timeLimitPerTestCase))
                 .volume(localSubmissionCopyDir).build());
 
         log.info("CreateContainerResponse --> {}", response);

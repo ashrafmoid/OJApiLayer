@@ -12,4 +12,7 @@ import lombok.NoArgsConstructor;
 public class CodeExecutionRequest {
     private String codeFilePath;
     private String testFilePath;
+    private String errorFilePath;
+    private String errorMsgFilePath;
+    private Integer timeLimit;
 }

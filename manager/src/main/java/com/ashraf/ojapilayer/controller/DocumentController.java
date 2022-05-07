@@ -20,8 +20,8 @@ import java.util.Objects;
 public class DocumentController {
     private final DocumentService documentService;
 
-    @GetMapping("/document/{documentId}")
-    public ResponseEntity<?> getDocument(@PathVariable("documentId") String documentId) {
+    @GetMapping(value = "/document/{documentId}")
+    public ResponseEntity<ByteArrayResource> getDocument(@PathVariable("documentId") String documentId) {
         FileStore fileStore = documentService.getDocument(documentId);
         if(Objects.isNull(fileStore)) {
             return ResponseEntity.ok(null);

@@ -5,5 +5,8 @@ public enum SubmissionStatus {
     TESTING,
     ACCEPTED,
     REJECTED,
-    ERROR;
+    RUNTIME_ERROR,
+    TIME_LIMIT_EXCEEDED,
+    COMPILATION_ERROR;
+
 }

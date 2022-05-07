@@ -98,7 +98,6 @@ public class SubmissionServiceImpl implements SubmissionService {
         submission.setExecutionTime(response.getExecutionTime());
         submission.setMemory(response.getMemory());
         submissionRepository.save(submission);
-
     }
 
     @Override

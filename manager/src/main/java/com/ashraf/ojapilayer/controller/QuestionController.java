@@ -1,5 +1,6 @@
 package com.ashraf.ojapilayer.controller;
 
+import com.ashraf.ojapilayer.DTO.PaginatedDTO;
 import com.ashraf.ojapilayer.DTO.QuestionDTO;
 import com.ashraf.ojapilayer.api.requestmodels.AddQuestionRequest;
 import com.ashraf.ojapilayer.api.requestmodels.FilterQueryRequest;
@@ -27,8 +28,8 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper questionMapper;
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addQuestion(@RequestPart(value = "file")MultipartFile file,
+    @PostMapping(value = "/submit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<QuestionDTO> addQuestion(@RequestPart(value = "file")MultipartFile file,
                                          @RequestPart(value = "metaData") QuestionMetaData metaData,
                                          @RequestPart(value = "testFile", required = false) MultipartFile testFile,
                                          @RequestPart(value = "outputFile", required = false) MultipartFile outputFile) {
@@ -41,34 +42,34 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public ResponseEntity<?> getQuestionById(@PathVariable("questionId") Long questionId) {
+    public ResponseEntity<QuestionDTO> getQuestionById(@PathVariable("questionId") Long questionId) {
          return ResponseEntity.ok(questionMapper.questionToQuestionDTO(
                  questionService.getQuestionById(questionId).orElseThrow()));
     }
 
-    @PatchMapping(path = "/{questionId}/add/testFile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addTestFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
+    @PatchMapping(path = "/{questionId}/add-testFile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<QuestionDTO> addTestFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
                                                    @PathVariable("questionId") String questionId) {
         return ResponseEntity.ok(questionMapper.questionToQuestionDTO(questionService.addTestFile(questionId, testFile)));
 
     }
 
-    @PatchMapping(path = "/{questionId}/add/outputFile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addOutputFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
+    @PatchMapping(path = "/{questionId}/add-outputFile" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<QuestionDTO> addOutputFileToQuestion(@RequestPart(value = "file") MultipartFile testFile,
                                                    @PathVariable("questionId") String questionId) {
         return ResponseEntity.ok(questionMapper.questionToQuestionDTO(questionService.addOutputFile(questionId, testFile)));
 
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllQuestions(
+    public ResponseEntity<PaginatedDTO<QuestionDTO>> getAllQuestions(
             @RequestParam(name = "page", defaultValue= "0") Integer pageNumber,
             @RequestParam(name = "size", defaultValue = "40")Integer size) {
         return ResponseEntity.ok(questionService.getAllQuestionsForPage(pageNumber, size));
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> getQuestionsByFilter(
+    public ResponseEntity<PaginatedDTO<QuestionDTO>> getQuestionsByFilter(
             @RequestParam("query")String queryString,
             @RequestParam(value = "pageNumber" , defaultValue = "0") Integer pageNumber,
             @RequestParam(value = "size", defaultValue = "40") Integer size
@@ -79,7 +80,7 @@ public class QuestionController {
     }
 
     @PatchMapping("/{questionId}")
-    public ResponseEntity<?> updateQuestionMetaData(
+    public ResponseEntity<QuestionDTO> updateQuestionMetaData(
             @RequestBody QuestionMetaData questionMetaData,
             @PathVariable("questionId") String questionId) {
         return ResponseEntity.ok(questionMapper.questionToQuestionDTO(

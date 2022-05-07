@@ -10,18 +10,22 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.io.IOException;
 
 @Log4j2
-public class ApplicationStarter {
+public class CodeExecutorStarter {
 
     public static void main(String[] args) throws IOException {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
         CodeHandlerFactory codeHandlerFactory = context.getBean(CodeHandlerFactory.class);
         final String submissionFolder = "/usr/local/submission/" + args[0];
         final String language = args[1];
+        final Integer timeLimit = Integer.valueOf(args[2]);
         System.out.printf("submission folder %s and language %s%n", submissionFolder , language);
         final CodeHandler codeHandler = codeHandlerFactory.getCodeHandler(language);
         codeHandler.executeCode(CodeExecutionRequest.builder()
                 .codeFilePath(submissionFolder + "/Main." + language)
-                        .testFilePath(submissionFolder + "/test.txt")
+                .testFilePath(submissionFolder + "/test.txt")
+                .errorFilePath(submissionFolder + "/error.txt")
+                .errorMsgFilePath(submissionFolder + "/error-msg.txt")
+                .timeLimit(timeLimit)
                 .build());
         System.out.println("executed class CodeExecutionService");
         context.close();

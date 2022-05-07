@@ -4,14 +4,20 @@ import com.ashraf.executor.handler.CodeHandler;
 import com.ashraf.executor.model.CodeExecutionRequest;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 
 @Log4j2
 @Component("c")
 public class CodeHandlerForC extends CodeHandler {
+
+    public CodeHandlerForC(DefaultExecutor defaultExecutor, ExecutorService executorService) {
+        super(executorService, defaultExecutor);
+    }
 
     @Override
     protected void compileCode(CodeExecutionRequest request) throws IOException {

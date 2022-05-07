@@ -2,7 +2,7 @@
 First layer of interaction from clients
 
 #### APIs
-* ToDO :- integrate swagger link for better documentation.
+* Swagger link :- http://localhost:8082/documentation/swagger-ui/index.html
 
 #### Sandboxing technique for code execution
 * Used docker container for executing code submitted by user.Communication between
@@ -20,13 +20,11 @@ First layer of interaction from clients
 
 #### TODO
 * Add memory limitation on each container, recording execution time for each test case
-* Proper distinction in submission result like compilation error, time limit exceeded
 * Scaling kafka consumer with multithreaded consumption
 * Authentication for resources related to a user visible to him
 * Prometheus and grafana support
 * Minimum UI support to run from browser rather than postman
 * dockerise the complete project with DB support included (see if kafka can be included as well)
-* swagger integration for documentation
 
 
 #### Filter APIs
