@@ -32,13 +32,15 @@ public abstract class CodeHandler {
     protected final DefaultExecutor executor;
 
     private static final String COMPILATION_ERROR = "COMPILATION_ERROR";
+    private static final String NEW_LINE = System.lineSeparator();
 
     public void executeCode(CodeExecutionRequest request) throws IOException {
         log.info("Starting to execute code");
         FileOutputStream output;
         FileOutputStream errorStream;
+        FileOutputStream reportingStream;
         try {
-             output = new FileOutputStream(request.getCodeFilePath().substring(0, request.getCodeFilePath().lastIndexOf("/")) + "/output.txt");
+             output = new FileOutputStream(request.getOutputFilePath());
              errorStream = new FileOutputStream(request.getErrorMsgFilePath());
              executor.setStreamHandler(new PumpStreamHandler(output, errorStream, null));
              compileCode(request);
@@ -50,10 +52,14 @@ public abstract class CodeHandler {
             sanitiseErrorFile(request.getErrorMsgFilePath());
         }
         try {
+            reportingStream = new FileOutputStream(request.getReportingFilePath());
             errorStream = new FileOutputStream(request.getErrorMsgFilePath());
             List<String> inputArg = FileUtil.getFileAsString(request.getTestFilePath());
             for (String inputString : inputArg) {
-               execute(inputString, errorStream, output, request);
+                Long startTime = System.currentTimeMillis();
+                execute(inputString, errorStream, output, request);
+                Long endTime = System.currentTimeMillis();
+                reportingStream.write(((endTime - startTime) + NEW_LINE).getBytes(StandardCharsets.UTF_8));
             }
         } catch (IOException | ExecutionException e) {
             FileUtil.WriteToFile("RUNTIME_ERROR", request.getErrorFilePath());

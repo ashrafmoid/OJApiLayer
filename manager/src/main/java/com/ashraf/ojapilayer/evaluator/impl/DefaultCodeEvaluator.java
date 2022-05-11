@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.function.Function;
 
 @Component
 public class DefaultCodeEvaluator implements CodeEvaluator {
@@ -20,8 +23,11 @@ public class DefaultCodeEvaluator implements CodeEvaluator {
         if (errorText.isEmpty()) {
             boolean isOutputSame = FileUtil.areFileContentsSame(new File(request.getCorrectOutputFilePath()),
                     new File(request.getUserGeneratedOutputFilePath()));
+            Integer highestExecutionTime = Arrays.stream(FileUtil.getFileAsString(request.getReportingFilePath()).split("\n"))
+                    .map(Integer::valueOf).mapToInt(v -> v).max().orElseThrow();
             return CodeExecutionResponse.builder()
                     .status(isOutputSame ? SubmissionStatus.ACCEPTED : SubmissionStatus.REJECTED)
+                    .executionTimeInMillis(highestExecutionTime)
                     .build();
         }
         return CodeExecutionResponse.builder()

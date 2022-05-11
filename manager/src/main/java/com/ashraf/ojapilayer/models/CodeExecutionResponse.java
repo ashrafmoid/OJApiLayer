@@ -14,7 +14,7 @@ import java.time.Duration;
 @AllArgsConstructor
 public class CodeExecutionResponse {
     private SubmissionStatus status;
-    private Duration executionTime;
+    private Integer executionTimeInMillis;
     private Integer memory;
     private String error;
 }

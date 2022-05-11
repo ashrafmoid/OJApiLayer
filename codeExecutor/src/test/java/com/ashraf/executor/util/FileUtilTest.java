@@ -12,7 +12,7 @@ public class FileUtilTest {
 
     @Test
     public void testGetFileAsString() throws IOException {
-        List<String> result = FileUtil.getFileAsString("/Users/ashrafmoid/Desktop/PersonalProject/OJApiLayer/codeExecutor/src/test/java/com/ashraf/executor/file/SampleFile.txt");
+        List<String> result = FileUtil.getFileAsString("/Users/ashrafmoid/Desktop/PersonalProject/OnlineJudge/codeExecutor/src/test/java/com/ashraf/executor/file/SampleFile.txt");
         System.out.println(result);
     }
 }

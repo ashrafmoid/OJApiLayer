@@ -95,7 +95,7 @@ public class SubmissionServiceImpl implements SubmissionService {
         Submission submission = submissionRepository.findById(submissionId).orElseThrow(() ->
                 new InvalidRequestException("No submission found for id " + submissionId));
         submission.setStatus(response.getStatus());
-        submission.setExecutionTime(response.getExecutionTime());
+        submission.setExecutionTime(response.getExecutionTimeInMillis());
         submission.setMemory(response.getMemory());
         submissionRepository.save(submission);
     }

@@ -15,4 +15,6 @@ public class CodeExecutionRequest {
     private String errorFilePath;
     private String errorMsgFilePath;
     private Integer timeLimit;
+    private String reportingFilePath;
+    private String outputFilePath;
 }

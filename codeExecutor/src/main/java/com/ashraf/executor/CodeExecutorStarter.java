@@ -26,6 +26,8 @@ public class CodeExecutorStarter {
                 .errorFilePath(submissionFolder + "/error.txt")
                 .errorMsgFilePath(submissionFolder + "/error-msg.txt")
                 .timeLimit(timeLimit)
+                .reportingFilePath(submissionFolder + "/report.txt")
+                .outputFilePath(submissionFolder + "/output.txt")
                 .build());
         System.out.println("executed class CodeExecutionService");
         context.close();

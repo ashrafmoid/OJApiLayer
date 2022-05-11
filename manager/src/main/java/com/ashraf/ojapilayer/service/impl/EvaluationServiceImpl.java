@@ -69,6 +69,7 @@ public class EvaluationServiceImpl implements EvaluationService {
                     .userGeneratedOutputFilePath(localSubmissionCopyDir + submission.getId() + "/output.txt")
                     .errorFilePath(localSubmissionCopyDir + submission.getId() + "/error.txt")
                     .errorMsgFilePath(localSubmissionCopyDir + submission.getId() + "/error-msg.txt")
+                    .reportingFilePath(localSubmissionCopyDir + submission.getId() + "/report.txt")
                     .build());
             log.info("CodeExecutionResponse is {}", response);
             submissionService.updateSubmissionResult(response, submission.getId());

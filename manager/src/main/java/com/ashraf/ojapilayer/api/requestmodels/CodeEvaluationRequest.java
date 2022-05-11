@@ -14,4 +14,5 @@ public class CodeEvaluationRequest {
     private String correctOutputFilePath;
     private String errorFilePath;
     private String errorMsgFilePath;
+    private String reportingFilePath;
 }

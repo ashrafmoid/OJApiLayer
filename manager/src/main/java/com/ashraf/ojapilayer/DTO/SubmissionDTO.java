@@ -18,7 +18,7 @@ public class SubmissionDTO {
     private String questionId;
     private String authorId;
     private ProgrammingLanguage language;
-    private Duration executionTime;
+    private Integer executionTime;
     private Integer memory;
     private String documentLink;
 }

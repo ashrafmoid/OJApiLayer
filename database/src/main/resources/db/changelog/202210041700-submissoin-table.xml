@@ -80,4 +80,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="Ashraf" id = "202212050037">
+        <modifyDataType tableName="submission" columnName="execution_time" newDataType="int8"/>
+    </changeSet>
+
 </databaseChangeLog>

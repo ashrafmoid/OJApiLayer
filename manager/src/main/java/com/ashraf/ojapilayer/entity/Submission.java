@@ -62,7 +62,7 @@ public class Submission extends BaseEntity {
     private ProgrammingLanguage language;
 
     @Column
-    private Duration executionTime;
+    private Integer executionTime;
 
     @Column
     private Integer memory;
